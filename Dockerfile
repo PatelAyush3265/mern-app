@@ -39,17 +39,14 @@ COPY frontend/ ./
 # Build frontend for production
 RUN npm run build
 
-# Copy frontend build to backend public directory
-WORKDIR /app
-COPY frontend/build ./backend/public
-
 # -----------------------------
 # Expose backend port
 # -----------------------------
 EXPOSE 3000
 
 # -----------------------------
-# Start backend
+# Copy frontend build to backend and start
 # -----------------------------
 WORKDIR /app/backend
+RUN cp -r ../frontend/build ./public
 CMD ["npm", "start"]
