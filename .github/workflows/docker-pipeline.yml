@@ -1,4 +1,4 @@
-name: Build, Push & Pull MERN Docker Image
+name: Build & Push MERN Docker Image
 
 on:
   push:
@@ -24,9 +24,3 @@ jobs:
       # Push image to Docker Hub
       - name: Push Docker Image
         run: docker push ayush01123/mern-app:latest
-
-      # Pull & run image
-      - name: Pull & Run Docker Image
-        run: |
-          docker pull ayush01123/mern-app:latest
-          docker run -d -p 3000:3000 ayush01123/mern-app:latest

@@ -12,11 +12,10 @@ RUN apt-get update && apt-get install -y python3 make g++ && rm -rf /var/lib/apt
 # -----------------------------
 # Backend
 # -----------------------------
-# Copy only package files first for caching
+# Copy backend package files first for caching
 COPY backend/package*.json ./backend/
 
 WORKDIR /app/backend
-
 # Install backend dependencies
 RUN npm install --legacy-peer-deps
 
@@ -26,30 +25,28 @@ COPY backend/ ./
 # -----------------------------
 # Frontend
 # -----------------------------
-# Copy only package files first for caching
+# Change back to app directory and copy frontend package files
+WORKDIR /app
 COPY frontend/package*.json ./frontend/
 
 WORKDIR /app/frontend
-
-# Install frontend dependencies
 RUN npm install --legacy-peer-deps
 
-# Copy frontend source code
+# Copy the rest of frontend files
 COPY frontend/ ./
+
 
 # Build frontend for production
 RUN npm run build
+
+# Copy frontend build to backend public directory
+WORKDIR /app
+COPY frontend/build ./backend/public
 
 # -----------------------------
 # Expose backend port
 # -----------------------------
 EXPOSE 3000
-
-# -----------------------------
-# Serve frontend from backend (optional)
-# If you want backend to serve frontend files:
-# -----------------------------
-# COPY frontend/build ./backend/public
 
 # -----------------------------
 # Start backend
